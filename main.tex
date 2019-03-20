@@ -1,0 +1,165 @@
+\documentclass[10pt,mathserif]{beamer}
+
+\input defs.tex
+
+%\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+
+% from boyd
+\mode<presentation>
+{
+\usetheme{default}
+}
+\setbeamertemplate{navigation symbols}{}
+\usecolortheme[rgb={0.13,0.28,0.59}]{structure}
+\setbeamertemplate{itemize subitem}{--}
+\setbeamertemplate{frametitle} {
+	\begin{center}
+	  {\large\bf \insertframetitle}
+	\end{center}
+}
+
+\newcommand\footlineon{
+  \setbeamertemplate{footline} {
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,leftskip=.8cm,rightskip=.6cm]{structure}
+      \footnotesize \insertsection
+      \hfill
+      {\insertframenumber}
+    \end{beamercolorbox}
+    \vskip 0.45cm
+  }
+}
+\footlineon
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\AtBeginSection[] 
+{ 
+	\begin{frame}<beamer> 
+		\frametitle{Outline} 
+		\tableofcontents[currentsection,currentsubsection] 
+	\end{frame} 
+}
+
+%
+\usepackage[export]{adjustbox}
+\usepackage{centernot}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+\usepackage{multirow}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{dsfont}
+\usepackage{mathtools}
+\usepackage{algorithm,algorithmic}
+\usepackage{adjustbox}
+% Setup TikZ
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{pgfplots}
+\usepackage{hyperref}
+
+\usepackage[beamer]{hf-tikz} 
+\usetikzlibrary{backgrounds,arrows,shapes.geometric,shapes.misc,positioning,patterns}
+
+
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+\renewcommand{\algorithmicrequire}{\textbf{initialize}}
+\newcommand{\algorithmicinput}{\textbf{input}}
+\newcommand{\algorithmicoutput}{\textbf{output}}
+\newcommand{\INPUT}{\item[\algorithmicinput]}
+\newcommand{\OUTPUT}{\item[\algorithmicoutput]}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+
+% Author, Title, etc.
+\title{PRML Lecture Note2}
+\author{Yeonwoo Jeong}
+\institute
+    {Seoul National University}
+\date{2017.09.01}
+
+% hide solutions in handout mode
+\newcommand\hideit[1]{%
+  \only<0| handout:1>{\mbox{}}%
+  \invisible<0| handout:1>{#1}}
+
+% independence symbol
+\newcommand{\indep}{\raisebox{0.05em}{\rotatebox[origin=c]{90}{$\models$}}}
+\tikzset{above left offset={0.0,0.6},below right offset={0.0,-0.5}}
+
+% The main document
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!15!bg}
+\begin{frame}
+    \frametitle{Law of total variance}
+    \begin{align}
+        \Var_x[x] = \Expect_y[\Var[x\mid y]] + \Var_y[\Expect_x[x\mid y]] \nonumber
+    \end{align}
+    \begin{proof}
+        \begin{align}
+            \Var_x[x] &= \Expect_x[x^2] - \Expect_x[x]^2 \nonumber\\
+            &= \Expect_y\Expect_{x\mid y}[x^2] - \Expect_y \Expect_{x\mid y} [x]^2 \nonumber\\
+            &= \Expect_y[\Expect_{x\mid y}[x^2] - \Expect_{x\mid y} [x]^2]+\Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber\\
+            &= \Expect_y[\Expect_{x\mid y}[x^2] - \Expect_{x\mid y} [x]^2]+\Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber\\
+            &= \Expect_y \Var_{x\mid y}[x] + \Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber
+        \end{align}
+    \end{proof}
+\end{frame}
+%%\begin{frame}
+%%    \frametitle{Form1\footnote{{\color{blue}{blue}} ``Footnote example``. \textcolor{gray}{gray.}}}
+%%    \begin{figure}
+%%        \centering
+%%        \includegraphics[width=0.9\textwidth,center]{npair}
+%%    \end{figure}
+%%    \vspace{1em}
+%%    \begin{itemize}\itemsep=12pt
+%%        \item Vspace is to control space between figure and items. 
+%%        \item Itemsep to control space between lines.
+%%    \end{itemize}
+%%\end{frame}
+%%
+%%\begin{frame}
+%%    \frametitle{Form2}
+%%    \begin{align}
+%%        &\minimize_{\substack{\bfh_1, \ldots, \bfh_n\\\bfh_i \in \{0,1\}^d, || \bfh_i ||_1 = k}} ~\sum_{i}^{n_c}\sum_{k:y_k=i}-\bfc_i^\intercal \bfh_k+\sum_{i}^{n_c} \sum_{\substack{k:y_k=i,\\l:y_l \neq i}} \bfh_k^\intercal P \bfh_l \\
+%%    \end{align}
+%%    \begin{itemize}
+%%        \item Equation example
+%%    \end{itemize}
+%%\end{frame}
+%%
+%%\begin{frame}
+%%    \frametitle{Form3} 
+%%    \begin{columns}
+%%        \begin{column}{0.5\textwidth}
+%%            \begin{figure}
+%%                \includegraphics[width=\textwidth,center]{npair}
+%%            \end{figure}
+%%        \end{column}
+%%        \begin{column}{0.5\textwidth}
+%%            \begin{figure}[ht]
+%%                \includegraphics[width=0.5\textwidth,center]{npair}
+%%            \end{figure}
+%%        \end{column}
+%%    \end{columns}
+%%    \begin{itemize}\itemsep=12pt
+%%        \item Form by multiicolumn
+%%    \end{itemize}
+%%    \normalsize
+%%\end{frame}
+\end{document}
+
+
