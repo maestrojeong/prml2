@@ -252,6 +252,48 @@ p(\bfmu| \Dataset, \bfalpha) \propto p(\Dataset | \bfmu)p(\bfmu | \alpha) \propt
 \item Central limit theorem 
 \end{itemize}
 \end{frame}
+\begin{frame}
+\frametitle{Characteristic function}
+\begin{itemize}
+\item $\Phi_X(\omega) = \Expect[e^{j\omega X}]$
+\item In case of Gaussian distribution,
+\begin{align}
+\Phi_X(\omega) &= \Expect[e^{j\omega X}]\nonumber\\
+&=\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-m)^2}{2\sigma^2}+j\omega x} dx \nonumber\\
+&=e^{j\omega m-\omega^2\sigma^2/2}\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-(m+j\omega \sigma^2))^2}{2\sigma^2}} dx =\nonumber\\
+&=e^{j\omega m-\omega^2\sigma^2/2} \nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+      
+\begin{frame}
+\frametitle{Central limit theorem}
+\begin{itemize}
+\item $X_i$ : iid random variables from  $\Expect[X_i] = \mu, \Var[X_i]=\sigma^2$.
+\item $Z_n$ follows the gaussian distribution mean 0 and variance $\sigma^2$   
+\begin{align}
+Z_n=\frac{\sum_{k=1}^{n} (X_k-\mu)}{\sqrt{n}}\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Proof for central limit theorem}
+\begin{proof}
+\begin{align}
+\Phi_{Z_n}(\omega) &= E[e^{j\omega \frac{\sum_{k=1}^{n} (X_k-\mu)}{\sqrt{n}}}]= E[\prod_{k=1}^{n}e^{j\omega \frac{(X_k-\mu)}{\sqrt{n}}}]\nonumber\\ 
+&=\prod_{k=1}^{n}E[e^{j\omega \frac{(X_k-\mu)}{\sqrt{n}}}] = (E[e^{j\omega \frac{(X_k-\mu)}{\sqrt{n}}}])^n \nonumber\\
+&=(1+j\omega \frac{(X_k-\mu)}{\sqrt{n}}-\omega^2 \frac{(X_k-\mu)^2}{2n}+E[R(\omega)])^n \nonumber
+\end{align}
+\begin{align}
+\lim_{n\to \infty}\Phi_{Z_n}(\omega)&=(1-\frac{\omega^2\sigma^2}{2n})^n= e^{\frac{-\omega^2\sigma^2}{2}} \nonumber \\
+\lim_{n\to \infty} P(Z_n = z)&=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{z^2}{2\sigma^2}}\nonumber
+\end{align}
+
+\end{proof}
+
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Gaussian distribution}
