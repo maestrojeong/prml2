@@ -104,19 +104,292 @@
 
 \setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!15!bg}
 \begin{frame}
-    \frametitle{Law of total variance}
-    \begin{align}
-        \Var_x[x] = \Expect_y[\Var[x\mid y]] + \Var_y[\Expect_x[x\mid y]] \nonumber
-    \end{align}
-    \begin{proof}
+\frametitle{Law of total variance}
+\begin{align}
+\Var_x[x] = \Expect_y[\Var[x| y]] + \Var_y[\Expect_x[x| y]] \nonumber
+\end{align}
+\begin{proof}
+\begin{align}
+\Var_x[x] &= \Expect_x[x^2] - \Expect_x[x]^2 \nonumber\\
+&= \Expect_y\Expect_{x| y}[x^2] - \Expect_y \Expect_{x| y} [x]^2 \nonumber\\
+&= \Expect_y[\Expect_{x| y}[x^2] - \Expect_{x| y} [x]^2]+\Expect_y[\Expect_{x| y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber\\
+&= \Expect_y \Var_{x| y}[x] + \Var_y\Expect_{x| y}[x] \nonumber
+\end{align}
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Parameter estimation in parametric distributions}
+\begin{itemize}
+\item
+\begin{align}
+\Expect_\theta[\theta] &= \int p(\theta) \theta d\theta \nonumber\\
+                   &= \int \int p(\theta | \Dataset) \theta d\theta p(\Dataset) d\Dataset \nonumber\\
+                   &= \Expect_{\Dataset}\Expect_{\theta | \Dataset} [\theta] \nonumber
+\end{align}
+\item
+\begin{align}
+\Var_\theta[\theta] = \Expect_\Dataset[\Var_{\theta| \Dataset}[\theta] + \Var_\Dataset\Expect_{\theta|\Dataset}[\theta]\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Bernoulli distribution}
+\begin{itemize}
+\item A single binary random variable $x\in \{0, 1\}$
+\item $p(x|\mu) = \mu^x(1-\mu)^{1-x}$ for $0\leq \mu \leq 1$
+\item $\Expect[x] = \mu$
+\item $\Var[x] = \mu(1-\mu)$
+\item For $\Dataset=\{x_i\}_{i=1}^N$, $\mu(=\frac{1}{N}\sum_{i=1}^N x_i)$  maximizes $p(\Dataset|\mu)$(MLE).
+\item $\sum_{i=1}^N x_i$ is called a \textit{sufficient statistic}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Binomial distribution}
+\begin{itemize}
+\item Random variable $m=x_1+\ldots+x_N$ for $x_i$s are random variables from iid bernoulli distribution.
+\item
+\begin{align}
+p(m| N,\mu)= {N \choose m} \mu^m (1-\mu)^{N-m}\nonumber
+\end{align}
+\item
+\begin{align}
+    \Expect[m]&= N\mu\nonumber\\
+    \Var[m]&= N\mu(1-\mu)\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Conjugate prior }
+\begin{itemize}
+\item Small dataset might result in over-fitted results.
+\item Bayesian approach to introduce a prior distribution $p(\mu)$.
+\item To make posterior distribution have the same functional form as the prior distribution.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Beta distribution}
+\begin{itemize}
+\item Conjugate prior of Binomial distribution
+\begin{align}
+p(\mu| a,b) &= \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \mu^{a-1}(1-\mu)^{b-1}\nonumber\\
+\Expect[\mu] &= \frac{a}{a+b} \nonumber\\
+\Var[\mu] &= \frac{ab}{(a+b)^2(a+b+1)} \nonumber
+\end{align}
+\item If $\Dataset$ consists of $m$ `heads' and $l(=N-m)$ `tails', 
+\begin{align}
+p(\mu | \Dataset,a,b) \propto \mu^{m+a-1}(1-\mu)^{N-m+b-1} \nonumber
+\end{align}.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{A generalization of the Bernoulli Distribution}
+\begin{itemize}
+\item $\bfmu = (\mu_1,\ldots, \mu_K)^\intercal$
+\item Each variable is represented by a $K$-dimensional vector $\bfx$.
+\item 
+\begin{align}
+p(\bfx | \bfmu) = \prod_{k=1}^K \mu_k^{x_k}\nonumber
+\end{align}
+\item
+\begin{align}
+\Expect[\bfx | \bfmu] = \sum_\bfx p(\bfx | \bfmu) \bfx = \bfmu\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{A generalization of the Bernoulli Distribution}
+\begin{itemize}
+\item $\Dataset = \{\bfx_1,\ldots,\bfx_N\}$, \textit{sufficient statistic} are 
+\begin{align}
+m_k= \sum_{n=1}^N \bfx_{n,k}\nonumber
+\end{align}
+for $k=\{1,\ldots,K\}$.
+
+\item
+\begin{align}
+    \maximize_{\mu_1,\ldots,\mu_K} p(\Dataset| \bfmu) = \prod_{k=1}^K \mu_k^{m_k}\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Multinomial Distribution}
+\begin{itemize}
+\item 
+\begin{align}
+p(m_1,\ldots,m_K|\bfmu, N) = {N \choose m_1,\ldots m_K} \prod_{k=1}^K \bfmu_k^{m_k} \nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dirichlet distribution}
+\begin{itemize}
+\item Conjugate prior of Multinomial distribution
+\item Prior distribution
+\begin{align} 
+p(\bfmu| \bfalpha) \propto \prod_{k=1}^K \mu_k^{\alpha_k-1} \nonumber
+\end{align}
+\item Posterior distribution
+\begin{align} 
+p(\bfmu| \Dataset, \bfalpha) \propto p(\Dataset | \bfmu)p(\bfmu | \alpha) \propto \prod_{k=1}^K \mu_k^{m_k+\alpha_k-1} \nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gaussian distribution}
+\begin{itemize}
+\item
+\begin{align}
+\Normal(x | \mu, \sigma^2) = \frac{1}{(2\pi \sigma^2)^{1/2}}\exp\left\{-\frac{1}{2\sigma^2} (x-\mu)^2 \right\}\nonumber
+\end{align}
+\item 
+\begin{align}
+\Normal(\bfx | \bfmu, \bfSigma) = \frac{1}{(2\pi)^{D/2}} \frac{1}{|\bfSigma|^{1/2}}\exp\left\{-\frac{1}{2} (\bfx-\bfmu)^\intercal \bfSigma^{-1}(\bfx-\bfmu)\right\}\nonumber
+\end{align}
+\item Central limit theorem 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gaussian distribution}
+\begin{itemize}
+\item $\Delta^2 = (\bfx-\bfmu)^\intercal \bfSigma^{-1} (\bfx - \bfmu)$, \textit{Mahalanobis distance}
+\item $\bfSigma$ can be taken to be symmetric.
+\item $\bfSigma \bfu_i = \lambda_i \bfu_i$.
+\item $\bfu_i^\intercal \bfu_j = \begin{cases} 1 &\text{if $i=j$}\\ 0 &\text{otherwise}\end{cases}$
+\item 
+\begin{align}
+    \bfSigma = \sum_{i=1}^D \lambda_i \bfu_i \bfu_i^\intercal\nonumber
+\end{align}
+\item 
+\begin{align}
+    \bfSigma^{-1} = \sum_{i=1}^D \frac{1}{\lambda_i} \bfu_i \bfu_i^\intercal\nonumber
+\end{align}
+\item
+$y_i = \bfu_i^\intercal(\bfx - \bfmu)$
+\item 
+\begin{align}
+    \bfSigma = \sum_{i=1}^D \frac{y_i^2}{\lambda_i} \nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gaussian distribution}
+\begin{itemize}
+\item
+\begin{align}
+\bfU = 
+\begin{bmatrix} 
+\bfu_1^\intercal\\
+\vdots\\
+\bfu_D^\intercal\\
+\end{bmatrix}\nonumber
+\end{align}
+\item $\bfy = \bfU (\bfx-\bfmu)$
+\item $\Expect[\bfx] = \bfmu$
+\item $\Expect[\bfx\bfx^\intercal] = \mu\mu^\intercal + \bfSigma$
+\item $\Cov[\bfx] = \Expect[(\bfx-\Expect[\bfx])(\bfx-\Expect[\bfx])^\intercal] = \bfSigma$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conditional and Marginal distribution}
+\begin{itemize}
+\item $\bfx=\begin{pmatrix}\bfx_a\\\bfx_b\end{pmatrix}$, $\bfmu = \begin{pmatrix} \bfmu_a\\\bfmu_b\end{pmatrix}, \bfSigma = \begin{pmatrix}\bfSigma_{aa} & \bfSigma_{ab}\\ \bfSigma_{ba} & \bfSigma_{bb} \end{pmatrix}$
+\item $\bfLambda = \bfSigma^{-1}=\begin{pmatrix}\bfLambda_{aa} & \bfLambda_{ab} \\ \bfLambda_{ba} & \bfLambda_{bb}\end{pmatrix}$
+\item $p(\bfx_a| \bfx_b) = \Normal\left(\bfx_a| \bfmu_a - \bfLambda_{aa}^{-1}\bfLambda_{ab}(\bfx_b-\bfmu_b), \bfLambda_{aa}^{-1}\right)$ 
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Bayes' theorem for Gaussian variables}
+\begin{itemize}
+\item $p(\bfx) = \Normal(\bfx | \bfmu, \bfLambda^{-1})$
+\item $p(\bfy| \bfx) = \Normal(\bfy | \bfA\bfx+\bfb, \bfL^{-1})$
+\item $p(\bfy) = \Normal(\bfy| \bfA\bfx + \bfb, \bfL^{-1}+\bfA\bfLambda^{-1}\bfA^{\intercal})$
+\item 
+\begin{align}
+&p(\bfx| \bfy)\nonumber\\
+&= \Normal(\bfx| (\bfLambda+\bfA^{\intercal}\bfL\bfA )^{-1})\{\bfA^{\intercal}\bfL(\bfy-\bfb)+\bfLambda\bfmu \}, (\bfLambda+\bfA^{\intercal}\bfL\bfA )^{-1})\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{MLE}
+\begin{itemize}
+    \item 
         \begin{align}
-            \Var_x[x] &= \Expect_x[x^2] - \Expect_x[x]^2 \nonumber\\
-            &= \Expect_y\Expect_{x\mid y}[x^2] - \Expect_y \Expect_{x\mid y} [x]^2 \nonumber\\
-            &= \Expect_y[\Expect_{x\mid y}[x^2] - \Expect_{x\mid y} [x]^2]+\Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber\\
-            &= \Expect_y[\Expect_{x\mid y}[x^2] - \Expect_{x\mid y} [x]^2]+\Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber\\
-            &= \Expect_y \Var_{x\mid y}[x] + \Expect_y[\Expect_{x\mid y}[x]^2] - \Expect_y \Expect_{x|y}[x]^2 \nonumber
+            &\maximize_{\bfmu, \bfSigma} \ln p(\bfX|\bfmu, \bfSigma)\nonumber\\
+            &=-\frac{ND}{2} \ln 2\pi - \frac{N}{2} \ln |\bfSigma| - \frac{1}{2} \sum_{n=1}^N (\bfx_n-\bfmu)^\intercal \bfSigma^{-1} (\bfx_n-\bfmu) \nonumber
         \end{align}
-    \end{proof}
+    \item 
+        \begin{align}
+            \bfmu_{ML} &= \frac{1}{N} \sum_{n=1}^N \bfx_n\nonumber\\
+            \bfSigma_{ML} &= \frac{1}{N} \sum_{n=1}^N (\bfx_n - \bfmu_{ML})(\bfx_n - \bfmu_{ML})^\intercal\nonumber
+        \end{align}
+    \item 
+        \begin{align}
+            \Expect[\bfmu_{ML}] &= \mu \nonumber\\
+            \Expect[\bfSigma_{ML}] &= \frac{N-1}{N}\bfSigma \nonumber
+        \end{align}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Robbins-Monro algorithm}
+\begin{itemize}
+    \item $f(\theta) = \Expect [z|\theta] = \int z p(z|\theta) dz$.
+    \item Our goal is to find $\theta^{*}$ such that $f(\theta^{*}) = 0$.
+    \item $\Var[z|\theta]$ should be finite.
+    \item $\theta^{(N)} = \theta^{(N-1)}+a_{N-1}z(\theta^{(N-1)})$
+    \item $\{a_N\}$ should satisfy the conditions. e.g. $a_N=\frac{1}{N}$
+    \begin{enumerate}
+        \item $\lim_{N\rightarrow \infty} a_N = 0$ :  process converges to a limiting value.
+        \item $\sum_{N=1}^{\infty} a_N = \infty$ : does not converge short of the root
+        \item $\sum_{N=1}^{\infty} a_N^2 < \infty$ : accumulated noise should have a finite noise.
+    \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sequential estimation}
+\begin{itemize}
+\item 
+$\Dataset = \{x_n\}_{n=1}^N$,
+\begin{align}
+\maximize_{\theta} \frac{1}{N} \sum_{n=1}^N \ln p(x_n|\theta) \nonumber
+\end{align}
+\item Find $\theta_{ML}$ such that
+\begin{align}
+    \Expect_x \left[\frac{\partial}{\partial \theta} \ln p(x|\theta)\right] = \lim_{N\rightarrow \infty}\frac{\partial}{\partial \theta} \left\{\frac{1}{N} \sum_{n=1}^N \ln p(x_n|\theta) \right\} = 0\nonumber
+\end{align}
+\item $z(x, \theta)=\frac{\partial}{\partial \theta} \ln p(x|\theta)$
+\item 
+\begin{align}
+    \Expect_z \left[z|\theta \right] = \Expect_x \left[\frac{\partial}{\partial \theta} \ln p(x|\theta)\right]  \nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sequential estimation}
+\begin{itemize}
+\item E.g. sequential estimation of $\mu_{ML}$
+\begin{align}
+    z(x, \mu) = \frac{\partial}{\partial \mu}\ln p(x|\mu,\sigma^2) = \frac{1}{\sigma^2}(x-\mu)\nonumber
+\end{align}
+\item 
+\begin{align}
+    z(\mu^{(N-1)}) = \frac{1}{\sigma^2} (x- \mu^{(N-1)})\nonumber
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bayesian approach on Guassian}
+
 \end{frame}
 %%\begin{frame}
 %%    \frametitle{Form1\footnote{{\color{blue}{blue}} ``Footnote example``. \textcolor{gray}{gray.}}}
